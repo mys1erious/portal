@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Roboto } from 'next/font/google';
 import './globals.css';
 
-const inter = Inter({ subsets: ['latin'] });
+const mainFont = Roboto({ weight: '300', subsets: ['latin'] });
 
 export const metadata: Metadata = {
     title: 'Portal',
@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang='en'>
-            <body className={inter.className}>{children}</body>
+            <body className={mainFont.className}>{children}</body>
         </html>
     );
 }
