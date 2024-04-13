@@ -4,7 +4,6 @@ import Wall from '@/features/core/components/Wall';
 import Mannequin from '@/features/characters/components/Mannequin';
 import { DEFAULT_ELEMENT_SIZE, DEFAULT_WALL_HEIGHT } from '@/constants';
 import DirectionalLight from '@/features/core/components/DirectionalLight';
-import NewMannequin from '@/features/characters/components/NewMannequin';
 
 const FLOOR_WIDTH = DEFAULT_ELEMENT_SIZE * 32;
 const FLOOR_HEIGHT = DEFAULT_ELEMENT_SIZE * 32;
@@ -13,6 +12,9 @@ const Room1 = () => {
     return (
         <group>
             <DirectionalLight />
+
+            <Mannequin />
+
             <Floor width={FLOOR_WIDTH*2} height={FLOOR_HEIGHT*2} />
             <Wall
                 width={FLOOR_WIDTH}
@@ -36,10 +38,6 @@ const Room1 = () => {
                 height={DEFAULT_WALL_HEIGHT}
                 position={[0, DEFAULT_WALL_HEIGHT / 2, FLOOR_HEIGHT / 2]}
             />
-
-            {/*<MannequinDefault position={[0, 0, 0]}/>*/}
-            <Mannequin position={[20, 88, 0]} />
-            <NewMannequin />
         </group>
     );
 };

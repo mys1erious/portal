@@ -5,7 +5,7 @@ export default function Game() {
     return (
         // <main className='h-screen w-screen'>
         <main className='h-screen w-11/12'>
-            <Canvas></Canvas>
+            <Canvas />
         </main>
     );
 }
