@@ -6,7 +6,7 @@ import { Canvas as BaseCanvas } from '@react-three/fiber';
 import {
     KeyboardControls,
     KeyboardControlsEntry,
-    OrbitControls,
+    PointerLockControls,
     Preload,
     Stats,
 } from '@react-three/drei';
@@ -44,19 +44,18 @@ const Canvas = () => {
         <BaseCanvas
             gl={{ powerPreference: 'high-performance' }}
             shadows={true}
-            camera={{
-                fov: FOV,
-                aspect: ASPECT_RATIO,
-                near: 1.0,
-                far: 10000.0,
-                position: [0, 500, -700],
-            }}
             onCreated={({ scene }) =>
                 (scene.background = new Color('lightblue'))
             }
+            camera={{
+                fov: FOV,
+                aspect: ASPECT_RATIO,
+                near: 1,
+                far: 3500,
+            }}
         >
+            <PointerLockControls />
             <AmbientLight />
-            <OrbitControls />
 
             <Suspense>
                 <Preload all />
@@ -64,13 +63,6 @@ const Canvas = () => {
                     <KeyboardControls map={controlsMap}>
                         <Room1 />
 
-                        {/*<RigidBody*/}
-                        {/*    colliders={'hull'}*/}
-                        {/*    restitution={0.5}*/}
-                        {/*    position={[0, 200, 0]}*/}
-                        {/*>*/}
-                        {/*    <Torus args={[10, 3, 16, 100]} />*/}
-                        {/*</RigidBody>*/}
                         <Element
                             rotation={[Math.PI / 2, 0, 0]}
                             position={[-500, 10, 100]}
