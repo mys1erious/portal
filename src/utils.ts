@@ -19,6 +19,7 @@ export const getTexture = (
     widthTextureDivider: number = DEFAULT_ELEMENT_SIZE,
     heightTextureDivider: number = DEFAULT_ELEMENT_SIZE
 ): Texture => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     let texture = useLoader(TextureLoader, textureSrc);
     texture = texture.clone();
     texture.wrapS = texture.wrapT = RepeatWrapping;

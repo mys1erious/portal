@@ -126,9 +126,7 @@ const useCharacterAnimations = (model: Group<Object3DEventMap>): void => {
         (state) => state.backward
     );
     const runPressed = useKeyboardControls<InputAction>((state) => state.run);
-    // const jumpPressed = useKeyboardControls<InputAction>(
-    //     (state) => state.jump
-    // );
+    // const jumpPressed = useKeyboardControls<InputAction>((state) => state.jump);
 
     useEffect(() => {
         actions.current = {

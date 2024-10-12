@@ -72,7 +72,6 @@ const useCharacterInputController = (model: Group): void => {
     };
 
     useFrame((state, delta) => {
-        // updateCameraRotation(state, delta);
         updatePosition(state, delta);
     });
 
@@ -117,7 +116,6 @@ const useCharacterInputController = (model: Group): void => {
         // TODO: handle y later
         velocity.setY(0);
         model.position.add(velocity);
-        console.log(velocity)
 
         const cameraOffset = new Vector3(
             ...CHARACTER_CAMERA_OFFSET
@@ -125,139 +123,6 @@ const useCharacterInputController = (model: Group): void => {
         const cameraPosition = model.position.clone().add(cameraOffset);
         camera.position.copy(cameraPosition);
     };
-
-    // handled by PointerLockControls ...
-    // const updateCameraRotation = (state: RootState, delta: number) => {
-    //     if (!camera) return;
-    //
-    //     const deltaX = state.pointer.x - prevPointerRef.current.x;
-    //     const deltaY = state.pointer.y - prevPointerRef.current.y;
-    //
-    //     if (deltaX === 0 && deltaY === 0) {
-    //         camera.quaternion.copy(cameraRotationRef.current);
-    //         return;
-    //     }
-    //
-    //     phiRef.current -= deltaX * CAMERA_SENSITIVITY * delta;
-    //     thetaRef.current = clamp(
-    //         thetaRef.current + deltaY * CAMERA_SENSITIVITY * delta,
-    //         -Math.PI / 3,
-    //         Math.PI / 3
-    //     );
-    //
-    //     const rotationX = new Quaternion();
-    //     rotationX.setFromAxisAngle(new Vector3(0, 1, 0), phiRef.current);
-    //     const rotationZ = new Quaternion();
-    //     rotationZ.setFromAxisAngle(new Vector3(1, 0, 0), thetaRef.current);
-    //
-    //     cameraRotationRef.current = new Quaternion();
-    //     cameraRotationRef.current.multiply(rotationX);
-    //     cameraRotationRef.current.multiply(rotationZ);
-    //     camera.quaternion.copy(cameraRotationRef.current);
-    //
-    //     prevPointerRef.current.x = state.pointer.x;
-    //     prevPointerRef.current.y = state.pointer.y;
-    // };
-
-    // const updatePosition = (delta: number) => {
-    //     if (!camera) return;
-    //
-    //     const xh = mouseXDelta / window.innerWidth;
-    //     const yh = mouseYDelta / window.innerHeight;
-    //
-    //     setPhi((prev) => prev + -xh * 0.04);
-    //     setTheta((prev) =>
-    //         clamp(prev + -yh * 0.04, -Math.PI / 3, Math.PI / 3)
-    //     );
-    //
-    //     const qx = new Quaternion();
-    //     qx.setFromAxisAngle(new Vector3(0, 1, 0), phi);
-    //     const qz = new Quaternion();
-    //     qz.setFromAxisAngle(new Vector3(1, 0, 0), theta);
-    //
-    //     const q = new Quaternion();
-    //     q.multiply(qx);
-    //     q.multiply(qz);
-    //
-    //     camera.quaternion.copy(q);
-    //
-    //     const cameraOffset = new Vector3(
-    //         ...CHARACTER_CAMERA_OFFSET
-    //     ).applyQuaternion(model.quaternion);
-    //
-    //     const cameraPosition = model.position.clone().add(cameraOffset);
-    //     camera.position.copy(cameraPosition);
-    //
-    //     setPreviousMouseX(mouseX);
-    //     setPreviousMouseY(mouseY);
-    //
-    //     const velocity = VELOCITY;
-    //     const frameDeceleration = new Vector3(
-    //         velocity.x * DECELERATION.x,
-    //         velocity.y * DECELERATION.y,
-    //         velocity.z * DECELERATION.z
-    //     );
-    //     frameDeceleration.multiplyScalar(delta);
-    //     frameDeceleration.z =
-    //         Math.sign(frameDeceleration.z) *
-    //         Math.min(Math.abs(frameDeceleration.z), Math.abs(velocity.z));
-    //
-    //     velocity.add(frameDeceleration);
-    //
-    //     const _Q = new Quaternion();
-    //     const _A = new Vector3();
-    //     const _R = model.quaternion.clone();
-    //
-    //     const acc = ACCELERATION.clone();
-    //     if (runPressed) {
-    //         acc.multiplyScalar(3.0);
-    //     }
-    //
-    //     if (forwardPressed) {
-    //         velocity.z += acc.z * delta;
-    //     }
-    //     if (backwardPressed) {
-    //         velocity.z -= acc.z * delta;
-    //     }
-    //     if (leftPressed) {
-    //         velocity.x += acc.x * delta;
-    //         // _A.set(0, 1, 0);
-    //         // _Q.setFromAxisAngle(_A, 4.0 * Math.PI * delta * ACCELERATION.y);
-    //         // _R.multiply(_Q);
-    //     }
-    //     if (rightPressed) {
-    //         velocity.x -= acc.x * delta;
-    //         // _A.set(0, 1, 0);
-    //         // _Q.setFromAxisAngle(_A, 4.0 * -Math.PI * delta * ACCELERATION.y);
-    //         // _R.multiply(_Q);
-    //     }
-    //
-    //     // model.quaternion.copy(_R);
-    //
-    //     const oldPosition = new Vector3();
-    //     oldPosition.copy(model.position);
-    //
-    //     const forward = new Vector3(0, 0, 1);
-    //     forward.applyQuaternion(model.quaternion);
-    //     forward.normalize();
-    //
-    //     const sideways = new Vector3(1, 0, 0);
-    //     sideways.applyQuaternion(model.quaternion);
-    //     sideways.normalize();
-    //
-    //     forward.multiplyScalar(velocity.z * delta);
-    //     sideways.multiplyScalar(velocity.x * delta);
-    //
-    //     if (Math.abs(forward.z) < ACCELERATION_BOTTOM_LIMIT) {
-    //         forward.setZ(0);
-    //     }
-    //     if (Math.abs(sideways.x) < ACCELERATION_BOTTOM_LIMIT) {
-    //         sideways.setX(0);
-    //     }
-    //
-    //     model.position.add(forward);
-    //     model.position.add(sideways);
-    // };
 };
 
 export default useCharacterInputController;

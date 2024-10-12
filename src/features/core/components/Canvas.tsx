@@ -62,21 +62,6 @@ const Canvas = () => {
                 <Physics debug gravity={[0, -9.81 * 10, 0]}>
                     <KeyboardControls map={controlsMap}>
                         <Room1 />
-
-                        <Element
-                            rotation={[Math.PI / 2, 0, 0]}
-                            position={[-500, 10, 100]}
-                        />
-                        <Element
-                            rotation={[Math.PI / 2, 0, 0]}
-                            position={[-490, 20, 110]}
-                        />
-                        <Element
-                            position={[-10, 101, 500]}
-                            width={200}
-                            height={200}
-                            depth={200}
-                        />
                     </KeyboardControls>
                 </Physics>
             </Suspense>
