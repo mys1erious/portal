@@ -8,7 +8,8 @@ import { DEFAULT_ELEMENT_DEPTH, DEFAULT_ELEMENT_SIZE } from '@/constants';
 import { getTexture } from '@/utils';
 import { Vector3D } from '@/types';
 
-type FloorProps = {
+
+type ElementProps = {
     position?: Vector3D;
     rotation?: Vector3D;
     width?: number;
@@ -38,7 +39,7 @@ const Element = ({
     castShadow = true,
     receiveShadow = true,
     rigidBodyType = 'fixed',
-}: FloorProps) => {
+}: ElementProps) => {
     const textureBase = baseTextureSrc
         ? getTexture(
               width,

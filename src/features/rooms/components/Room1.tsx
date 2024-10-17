@@ -5,6 +5,7 @@ import Mannequin from '@/features/characters/components/Mannequin';
 import { DEFAULT_ELEMENT_SIZE, DEFAULT_WALL_HEIGHT } from '@/constants';
 import DirectionalLight from '@/features/core/components/DirectionalLight';
 import Element from '@/features/core/components/Element';
+import Mirror from '@/features/core/components/Mirror';
 
 const FLOOR_WIDTH = DEFAULT_ELEMENT_SIZE * 32;
 const FLOOR_HEIGHT = DEFAULT_ELEMENT_SIZE * 32;
@@ -54,6 +55,11 @@ const Room1 = () => {
                 height={200}
                 depth={200}
             />
+
+            {/*<Mirror*/}
+            {/*    height={DEFAULT_WALL_HEIGHT}*/}
+            {/*    position={[-10, 101, 300]}*/}
+            {/*/>*/}
         </group>
     );
 };
