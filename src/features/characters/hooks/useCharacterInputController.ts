@@ -1,6 +1,9 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import {
     CHARACTER_CAMERA_OFFSET,
     CHARACTER_MAX_VELOCITY,
+    DEFAULT_CHARACTER_HEIGHT,
     DEFAULT_CHARACTER_RUN_MULTIPLIER,
     DEFAULT_CHARACTER_VELOCITY_MULTIPLIER,
     InputAction,
@@ -10,12 +13,17 @@ import { Group, Quaternion, Vector3 } from 'three';
 import { useKeyboardControls } from '@react-three/drei';
 import React, { useEffect, useRef } from 'react';
 import { lerp } from '@/utils';
+import { PortalData } from '@/features/characters/components/Mannequin';
 
 const DECELERATION = new Vector3(-5, -0.0001, -5.0);
 const ACCELERATION = new Vector3(175, 0.25, 200.0);
 const VELOCITY = new Vector3(0, 0, 0);
 
-const useCharacterInputController = (rigidBodyRef: React.RefObject<any>): void => {
+const useCharacterInputController = (
+    rigidBodyRef: React.RefObject<any>,
+    portals: PortalData[],
+    setPortals: React.Dispatch<React.SetStateAction<PortalData[]>>
+): void => {
     const { camera } = useThree();
 
     const forwardPressed = useKeyboardControls<InputAction>(
@@ -37,26 +45,24 @@ const useCharacterInputController = (rigidBodyRef: React.RefObject<any>): void =
     const rightMousePressed = useRef(false);
 
     useEffect(() => {
-        document.addEventListener(
-            'mousedown',
-            (e: MouseEvent) => onMouseDown(e),
-            false
-        );
-        document.addEventListener(
-            'mouseup',
-            (e: MouseEvent) => onMouseUp(e),
-            false
-        );
+        document.addEventListener('mousedown', onMouseDown);
+        // document.addEventListener(
+        //     'mouseup',
+        //     (e: MouseEvent) => onMouseUp(e),
+        //     false
+        // );
         return () => {
-            document.removeEventListener('mousedown', onMouseDown, false);
-            document.removeEventListener('mouseup', onMouseUp, false);
+            document.removeEventListener('mousedown', onMouseDown);
+            // document.removeEventListener('mouseup', onMouseUp);
         };
     }, []);
 
     const onMouseDown = (e: MouseEvent) => {
         switch (e.button) {
             case 0: {
-                leftMousePressed.current = true;
+                shoot();
+
+                // leftMousePressed.current = true;
                 break;
             }
             case 2: {
@@ -85,6 +91,38 @@ const useCharacterInputController = (rigidBodyRef: React.RefObject<any>): void =
             updateCamera(delta);
         }
     });
+
+    const shoot = () => {
+        if (!rigidBodyRef.current) return;
+
+        const characterPosition = rigidBodyRef.current.translation();
+        const position = {
+            x: characterPosition.x + 10,
+            y: characterPosition.y + CHARACTER_CAMERA_OFFSET[1],
+            z: characterPosition.z,
+        };
+
+        const direction = new Vector3();
+        camera.getWorldDirection(direction);
+        direction.normalize();
+
+        const speed = 500;
+        const velocity = {
+            x: direction.x * speed,
+            y: direction.y * speed,
+            z: direction.z * speed,
+        };
+        const portalId = uuidv4();
+
+        setPortals((prevPortals) => [
+            ...prevPortals,
+            {
+                id: portalId,
+                position: position,
+                velocity: velocity,
+            },
+        ]);
+    };
 
     const updatePosition = (delta: number) => {
         const forward = new Vector3(0, 0, -1)
@@ -140,7 +178,11 @@ const useCharacterInputController = (rigidBodyRef: React.RefObject<any>): void =
 
         const currentPosition = rigidBodyRef.current.translation();
         const newPosition = new Vector3(
-            lerp(currentPosition.x, currentPosition.x + velocity.x * delta, 0.8),
+            lerp(
+                currentPosition.x,
+                currentPosition.x + velocity.x * delta,
+                0.8
+            ),
             currentPosition.y,
             lerp(currentPosition.z, currentPosition.z + velocity.z * delta, 0.8)
         );
@@ -168,7 +210,11 @@ const useCharacterInputController = (rigidBodyRef: React.RefObject<any>): void =
         const currentRotation = rigidBodyRef.current.rotation();
         const smoothFactor = 5.0;
         const newRotation = new Quaternion();
-        newRotation.slerpQuaternions(currentRotation, targetQuaternion, delta * smoothFactor);
+        newRotation.slerpQuaternions(
+            currentRotation,
+            targetQuaternion,
+            delta * smoothFactor
+        );
         rigidBodyRef.current.setRotation(newRotation);
     };
 

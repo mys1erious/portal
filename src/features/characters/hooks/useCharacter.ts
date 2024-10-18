@@ -3,13 +3,16 @@ import useCharacterInputController from '@/features/characters/hooks/useCharacte
 import useCharacterAnimations from '@/features/characters/hooks/useCharacterAnimations';
 import React, { useEffect } from 'react';
 import { setModelShadow } from '@/utils';
+import { PortalData } from '@/features/characters/components/Mannequin';
 
 const useCharacter = (
     rigidBodyRef: React.RefObject<any>,
     // model?: Group,
     model: Group,
+    portals: PortalData[],
+    setPortals: React.Dispatch<React.SetStateAction<PortalData[]>>
 ): void => {
-    useCharacterInputController(rigidBodyRef);
+    useCharacterInputController(rigidBodyRef, portals, setPortals);
     useCharacterAnimations(model);
 
     useEffect(() => {

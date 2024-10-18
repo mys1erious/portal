@@ -6,6 +6,7 @@ import { DEFAULT_ELEMENT_SIZE, DEFAULT_WALL_HEIGHT } from '@/constants';
 import DirectionalLight from '@/features/core/components/DirectionalLight';
 import Element from '@/features/core/components/Element';
 import Mirror from '@/features/core/components/Mirror';
+import Portal from '@/features/characters/components/Portal';
 
 const FLOOR_WIDTH = DEFAULT_ELEMENT_SIZE * 32;
 const FLOOR_HEIGHT = DEFAULT_ELEMENT_SIZE * 32;
@@ -56,10 +57,12 @@ const Room1 = () => {
                 depth={200}
             />
 
-            {/*<Mirror*/}
-            {/*    height={DEFAULT_WALL_HEIGHT}*/}
-            {/*    position={[-10, 101, 300]}*/}
-            {/*/>*/}
+            <Mirror
+                height={DEFAULT_WALL_HEIGHT}
+                width={DEFAULT_ELEMENT_SIZE * 2}
+                position={[-150, 101, 300]}
+                rotation={[0, -Math.PI / 2, 0]}
+            />
         </group>
     );
 };
