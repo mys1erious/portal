@@ -4,6 +4,7 @@ import React, { Suspense, useMemo } from 'react';
 
 import { Canvas as BaseCanvas } from '@react-three/fiber';
 import {
+    Environment,
     KeyboardControls,
     KeyboardControlsEntry,
     PointerLockControls,
@@ -40,34 +41,35 @@ const Canvas = () => {
     );
 
     return (
-        <BaseCanvas
-            gl={{ powerPreference: 'high-performance' }}
-            shadows={true}
-            onCreated={({ scene }) =>
-                (scene.background = new Color('lightblue'))
-            }
-            camera={{
-                fov: FOV,
-                aspect: ASPECT_RATIO,
-                near: 1,
-                far: 3500,
-            }}
-        >
-            <PointerLockControls />
-            <AmbientLight />
+        <KeyboardControls map={controlsMap}>
+            <BaseCanvas
+                gl={{ powerPreference: 'high-performance' }}
+                shadows={true}
+                onCreated={({ scene }) =>
+                    (scene.background = new Color('lightblue'))
+                }
+                camera={{
+                    fov: FOV,
+                    aspect: ASPECT_RATIO,
+                    near: 1,
+                    far: 3500,
+                }}
+            >
+                <PointerLockControls />
+                <AmbientLight />
+                {/*<Environment preset="night" />*/}
 
-            <Suspense>
-                <Preload all />
-                <Physics debug>
-                    <KeyboardControls map={controlsMap}>
-                        <World/>
-                    </KeyboardControls>
-                </Physics>
-            </Suspense>
+                <Suspense>
+                    <Preload all />
+                    <Physics debug>
+                        <World />
+                    </Physics>
+                </Suspense>
 
-            <Perf />
-            <Stats />
-        </BaseCanvas>
+                <Perf />
+                <Stats />
+            </BaseCanvas>
+        </KeyboardControls>
     );
 };
 

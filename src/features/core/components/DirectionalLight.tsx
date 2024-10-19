@@ -2,10 +2,10 @@ import React from 'react';
 import { DEFAULT_ELEMENT_SIZE } from '@/constants';
 
 const DirectionalLight = () => {
-    // TODO: refactor
-    const halfSize = DEFAULT_ELEMENT_SIZE * 32;
+    // TODO: ??
+    const halfSize = 240;
     return (
-        <mesh position={[1200, 800, -1200]}>
+        <mesh position={[120, 80, -120]}>
             <directionalLight
                 color='white'
                 intensity={0.8}
@@ -25,7 +25,7 @@ const DirectionalLight = () => {
                 />
             </directionalLight>
             {/* To see where the Light is */}
-            <mesh scale={[50, 50, 50]}>
+            <mesh scale={[5, 5, 5]}>
                 <sphereGeometry args={[0.2, 30, 10]} />
                 <meshStandardMaterial color='yellow' />
             </mesh>
