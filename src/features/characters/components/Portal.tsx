@@ -1,19 +1,15 @@
 'use client';
 
-import React, { forwardRef, useEffect, useRef } from 'react';
-import { Mesh, MeshStandardMaterial, BoxGeometry } from 'three';
+import React, { useEffect, useRef } from 'react';
 import { RigidBody, CuboidCollider } from '@react-three/rapier';
-import { useThree } from '@react-three/fiber';
 
 type PortalProps = {
-    id: string;
     initialPosition: { x: number; y: number; z: number };
     initialVelocity: { x: number; y: number; z: number };
     onRemove: () => void;
 };
 
 const Portal: React.FC<PortalProps> = ({
-    id,
     initialPosition,
     initialVelocity,
     onRemove,
@@ -42,9 +38,9 @@ const Portal: React.FC<PortalProps> = ({
             colliders={false}
             gravityScale={0}
         >
-            <CuboidCollider args={[5, 8, 5]} />
+            <CuboidCollider args={[0.01, 0.01, 0.01]} />
             <mesh castShadow receiveShadow>
-                <boxGeometry args={[10, 16, 10]} />
+                <boxGeometry args={[0.02, 0.02, 0.02]} />
                 <meshStandardMaterial color='blue' />
             </mesh>
         </RigidBody>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useFBX } from '@react-three/drei';
 import useCharacter from '@/features/characters/hooks/useCharacter';
 import { Vector3D } from '@/types';
@@ -7,7 +7,7 @@ import {
     CylinderCollider,
     RigidBody,
 } from '@react-three/rapier';
-import { DEFAULT_CHARACTER_HEIGHT, DEFAULT_CHARACTER_WIDTH } from '@/constants';
+import { MANNEQUIN_HEIGHT } from '@/constants';
 import { RigidBody as TRigidBody } from '@dimforge/rapier3d-compat';
 import Portal from '@/features/characters/components/Portal';
 
@@ -18,7 +18,6 @@ type MannequinProps = {
 };
 
 export type PortalData = {
-    id: string;
     position: { x: number; y: number; z: number };
     velocity: { x: number; y: number; z: number };
 };
@@ -27,9 +26,9 @@ const Mannequin = ({ position = [0, 0, 0] }: MannequinProps) => {
     const model = useFBX(MODEL_PATH);
     const rigidBodyRef = useRef<TRigidBody | null>(null);
 
-    const [portals, setPortals] = useState<PortalData[]>([]);
+    const [portalData, setPortalData] = useState<PortalData | null>(null);
 
-    useCharacter(rigidBodyRef, model, portals, setPortals);
+    useCharacter(rigidBodyRef, model, portalData, setPortalData);
 
     useEffect(() => {
         if (rigidBodyRef.current) {
@@ -40,35 +39,33 @@ const Mannequin = ({ position = [0, 0, 0] }: MannequinProps) => {
         }
     }, []);
 
+    const onRemove = useCallback(() => {
+        setPortalData(null);
+    }, []);
+
     return (
         <>
-            {portals.map((portal) => (
+            {portalData && (
                 <Portal
-                    key={portal.id}
-                    id={portal.id}
-                    initialPosition={portal.position}
-                    initialVelocity={portal.velocity}
-                    onRemove={() => {
-                        setPortals((prevPortals) =>
-                            prevPortals.filter((p) => p.id !== portal.id)
-                        );
-                    }}
+                    initialPosition={portalData.position}
+                    initialVelocity={portalData.velocity}
+                    onRemove={onRemove}
                 />
-            ))}
+            )}
             <RigidBody
                 ref={rigidBodyRef}
                 type='dynamic'
                 colliders={false}
-                gravityScale={0}
+                enabledRotations={[false, false, false]}
             >
                 {/*<CapsuleCollider*/}
                 <CylinderCollider
-                    args={[DEFAULT_CHARACTER_HEIGHT / 2 - 1, 16]}
-                    position={[0, DEFAULT_CHARACTER_HEIGHT / 2, 0]}
-                    friction={0}
+                    args={[MANNEQUIN_HEIGHT / 2 - 0.1, 0.3]}
+                    position={[0, MANNEQUIN_HEIGHT / 2, 0]}
+                    friction={1}
                     restitution={0}
                 />
-                <primitive object={model} />
+                {/*<primitive object={model} />*/}
             </RigidBody>
         </>
     );

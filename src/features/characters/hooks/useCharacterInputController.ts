@@ -1,28 +1,20 @@
-import { v4 as uuidv4 } from 'uuid';
-
 import {
     CHARACTER_CAMERA_OFFSET,
-    CHARACTER_MAX_VELOCITY,
-    DEFAULT_CHARACTER_HEIGHT,
-    DEFAULT_CHARACTER_RUN_MULTIPLIER,
-    DEFAULT_CHARACTER_VELOCITY_MULTIPLIER,
-    InputAction,
+    MANNEQUIN_HEIGHT,
+    CHARACTER_RUN_SPEED,
+    CHARACTER_SPEED,
+    InputAction, PROJECTILE_SPEED,
 } from '@/constants';
-import { RootState, useFrame, useThree } from '@react-three/fiber';
-import { Group, Quaternion, Vector3 } from 'three';
+import { useFrame, useThree } from '@react-three/fiber';
+import { Quaternion, Vector3 } from 'three';
 import { useKeyboardControls } from '@react-three/drei';
-import React, { useEffect, useRef } from 'react';
-import { lerp } from '@/utils';
+import React, { useCallback, useEffect } from 'react';
 import { PortalData } from '@/features/characters/components/Mannequin';
-
-const DECELERATION = new Vector3(-5, -0.0001, -5.0);
-const ACCELERATION = new Vector3(175, 0.25, 200.0);
-const VELOCITY = new Vector3(0, 0, 0);
 
 const useCharacterInputController = (
     rigidBodyRef: React.RefObject<any>,
-    portals: PortalData[],
-    setPortals: React.Dispatch<React.SetStateAction<PortalData[]>>
+    portalData: PortalData | null,
+    setPortalData: React.Dispatch<React.SetStateAction<PortalData | null>>
 ): void => {
     const { camera } = useThree();
 
@@ -41,19 +33,10 @@ const useCharacterInputController = (
     //     (state) => state.jump
     // );
 
-    const leftMousePressed = useRef(false);
-    const rightMousePressed = useRef(false);
-
     useEffect(() => {
         document.addEventListener('mousedown', onMouseDown);
-        // document.addEventListener(
-        //     'mouseup',
-        //     (e: MouseEvent) => onMouseUp(e),
-        //     false
-        // );
         return () => {
             document.removeEventListener('mousedown', onMouseDown);
-            // document.removeEventListener('mouseup', onMouseUp);
         };
     }, []);
 
@@ -61,24 +44,6 @@ const useCharacterInputController = (
         switch (e.button) {
             case 0: {
                 shoot();
-
-                // leftMousePressed.current = true;
-                break;
-            }
-            case 2: {
-                rightMousePressed.current = true;
-                break;
-            }
-        }
-    };
-    const onMouseUp = (e: MouseEvent) => {
-        switch (e.button) {
-            case 0: {
-                leftMousePressed.current = false;
-                break;
-            }
-            case 2: {
-                rightMousePressed.current = false;
                 break;
             }
         }
@@ -92,37 +57,32 @@ const useCharacterInputController = (
         }
     });
 
-    const shoot = () => {
+    const shoot = useCallback(() => {
         if (!rigidBodyRef.current) return;
-
-        const characterPosition = rigidBodyRef.current.translation();
-        const position = {
-            x: characterPosition.x + 10,
-            y: characterPosition.y + CHARACTER_CAMERA_OFFSET[1],
-            z: characterPosition.z,
-        };
 
         const direction = new Vector3();
         camera.getWorldDirection(direction);
         direction.normalize();
 
-        const speed = 500;
-        const velocity = {
-            x: direction.x * speed,
-            y: direction.y * speed,
-            z: direction.z * speed,
+        const characterPosition = rigidBodyRef.current.translation();
+        const position = {
+            x: characterPosition.x + direction.x,
+            y: characterPosition.y + direction.y + MANNEQUIN_HEIGHT - 0.18,
+            z: characterPosition.z + direction.z,
         };
-        const portalId = uuidv4();
 
-        setPortals((prevPortals) => [
-            ...prevPortals,
-            {
-                id: portalId,
-                position: position,
-                velocity: velocity,
-            },
-        ]);
-    };
+        const velocity = {
+            x: direction.x * PROJECTILE_SPEED,
+            y: direction.y * PROJECTILE_SPEED,
+            z: direction.z * PROJECTILE_SPEED,
+        };
+
+        setPortalData(null);
+        setPortalData({
+            position: position,
+            velocity: velocity,
+        });
+    }, [rigidBodyRef, setPortalData, camera]);
 
     const updatePosition = (delta: number) => {
         const forward = new Vector3(0, 0, -1)
@@ -135,63 +95,46 @@ const useCharacterInputController = (
             .setY(0)
             .normalize();
 
-        const velocity = VELOCITY.clone();
-
-        const frameDeceleration = new Vector3(
-            velocity.x * DECELERATION.x,
-            velocity.y * DECELERATION.y,
-            velocity.z * DECELERATION.z
-            // ).multiplyScalar(DEFAULT_CHARACTER_VELOCITY_MULTIPLIER * delta);
-        );
-        frameDeceleration.z =
-            Math.sign(frameDeceleration.z) *
-            Math.min(Math.abs(frameDeceleration.z), Math.abs(velocity.z));
-        velocity.add(frameDeceleration);
-
-        const acc = ACCELERATION.clone();
-        // const acc = ACCELERATION.clone().multiplyScalar(
-        //     DEFAULT_CHARACTER_VELOCITY_MULTIPLIER * delta
-        // );
-        if (runPressed) {
-            acc.multiplyScalar(DEFAULT_CHARACTER_RUN_MULTIPLIER);
-        }
+        const moveDirection = new Vector3();
 
         if (forwardPressed) {
-            velocity.add(forward.multiplyScalar(acc.z));
+            moveDirection.add(forward);
         }
         if (backwardPressed) {
-            velocity.add(forward.multiplyScalar(-acc.z));
+            moveDirection.add(forward.clone().negate());
         }
         if (leftPressed) {
-            velocity.add(sideways.multiplyScalar(-acc.x));
+            moveDirection.add(sideways.clone().negate());
         }
         if (rightPressed) {
-            velocity.add(sideways.multiplyScalar(acc.x));
+            moveDirection.add(sideways);
         }
 
-        if (velocity.length() > CHARACTER_MAX_VELOCITY) {
-            velocity.normalize().multiplyScalar(CHARACTER_MAX_VELOCITY);
+        if (moveDirection.lengthSq() > 0) {
+            moveDirection.normalize();
+            const speed = runPressed ? CHARACTER_RUN_SPEED : CHARACTER_SPEED;
+            const desiredVelocity = moveDirection.multiplyScalar(speed);
+
+            const currentLinvel = rigidBodyRef.current.linvel();
+            rigidBodyRef.current.setLinvel(
+                {
+                    x: desiredVelocity.x,
+                    y: currentLinvel.y,
+                    z: desiredVelocity.z,
+                },
+                true
+            );
+        } else {
+            const currentLinvel = rigidBodyRef.current.linvel();
+            rigidBodyRef.current.setLinvel(
+                {
+                    x: currentLinvel.x * 0.8,
+                    y: currentLinvel.y,
+                    z: currentLinvel.z * 0.8,
+                },
+                true
+            );
         }
-
-        // TODO: handle y later
-        velocity.setY(0);
-
-        const currentPosition = rigidBodyRef.current.translation();
-        const newPosition = new Vector3(
-            lerp(
-                currentPosition.x,
-                currentPosition.x + velocity.x * delta,
-                0.8
-            ),
-            currentPosition.y,
-            lerp(currentPosition.z, currentPosition.z + velocity.z * delta, 0.8)
-        );
-        rigidBodyRef.current.setTranslation(
-            { x: newPosition.x, y: newPosition.y, z: newPosition.z },
-            true
-        );
-
-        // rigidBodyRef.current.setLinvel(velocity, true);
     };
 
     const updateRotation = (delta: number) => {
@@ -226,7 +169,6 @@ const useCharacterInputController = (
             characterPosition.z + CHARACTER_CAMERA_OFFSET[2]
         );
         camera.position.copy(newCameraPosition);
-        // camera.lookAt(characterPosition);
     };
 };
 

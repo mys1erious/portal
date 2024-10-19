@@ -22,7 +22,7 @@ const Floor = ({
         <Element
             position={position}
             rotation={[Math.PI / 2, 0, 0]}
-            depth={1}
+            depth={0.0001}
             width={width}
             height={height}
             baseTextureSrc={baseTextureSrc}

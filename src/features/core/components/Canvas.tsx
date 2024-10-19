@@ -24,8 +24,7 @@ import {
 import AmbientLight from '@/features/core/components/AmbientLight';
 import { Physics } from '@react-three/rapier';
 import { Color } from 'three';
-import Room1 from '@/features/rooms/components/Room1';
-import Element from '@/features/core/components/Element';
+import World from '@/features/rooms/components/World';
 
 const Canvas = () => {
     const controlsMap = useMemo<KeyboardControlsEntry[]>(
@@ -59,9 +58,9 @@ const Canvas = () => {
 
             <Suspense>
                 <Preload all />
-                <Physics debug gravity={[0, -9.81 * 10, 0]}>
+                <Physics debug>
                     <KeyboardControls map={controlsMap}>
-                        <Room1 />
+                        <World/>
                     </KeyboardControls>
                 </Physics>
             </Suspense>

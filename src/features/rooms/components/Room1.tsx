@@ -2,11 +2,14 @@ import React from 'react';
 import Floor from '@/features/core/components/Floor';
 import Wall from '@/features/core/components/Wall';
 import Mannequin from '@/features/characters/components/Mannequin';
-import { DEFAULT_ELEMENT_SIZE, DEFAULT_WALL_HEIGHT } from '@/constants';
+import {
+    DEFAULT_ELEMENT_DEPTH,
+    DEFAULT_ELEMENT_SIZE,
+    DEFAULT_WALL_HEIGHT,
+} from '@/constants';
 import DirectionalLight from '@/features/core/components/DirectionalLight';
 import Element from '@/features/core/components/Element';
 import Mirror from '@/features/core/components/Mirror';
-import Portal from '@/features/characters/components/Portal';
 
 const FLOOR_WIDTH = DEFAULT_ELEMENT_SIZE * 32;
 const FLOOR_HEIGHT = DEFAULT_ELEMENT_SIZE * 32;
@@ -44,23 +47,23 @@ const Room1 = () => {
 
             <Element
                 rotation={[Math.PI / 2, 0, 0]}
-                position={[-500, 10, 100]}
+                position={[5, DEFAULT_ELEMENT_DEPTH, 1]}
             />
             <Element
                 rotation={[Math.PI / 2, 0, 0]}
-                position={[-490, 20, 110]}
+                position={[4.8, DEFAULT_ELEMENT_DEPTH * 2, 0.8]}
             />
+            <Element position={[1, 0.5, 8]} width={3} height={3} depth={3} />
             <Element
-                position={[-10, 101, 500]}
-                width={200}
-                height={200}
-                depth={200}
+                rotation={[Math.PI / 4, 0, 0]}
+                position={[3, DEFAULT_ELEMENT_DEPTH * 2, 0.8]}
+                height={2}
             />
 
             <Mirror
                 height={DEFAULT_WALL_HEIGHT}
-                width={DEFAULT_ELEMENT_SIZE * 2}
-                position={[-150, 101, 300]}
+                width={4}
+                position={[-2, DEFAULT_WALL_HEIGHT / 2, 3]}
                 rotation={[0, -Math.PI / 2, 0]}
             />
         </group>

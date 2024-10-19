@@ -17,7 +17,7 @@ const DirectionalLight = () => {
                 <orthographicCamera
                     attach='shadow-camera'
                     near={1.0}
-                    far={halfSize*2}
+                    far={halfSize * 2}
                     left={-halfSize * 0.75}
                     right={halfSize * 0.75}
                     top={halfSize * 0.5}

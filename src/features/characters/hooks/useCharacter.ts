@@ -7,17 +7,16 @@ import { PortalData } from '@/features/characters/components/Mannequin';
 
 const useCharacter = (
     rigidBodyRef: React.RefObject<any>,
-    // model?: Group,
     model: Group,
-    portals: PortalData[],
-    setPortals: React.Dispatch<React.SetStateAction<PortalData[]>>
+    portalData: PortalData | null,
+    setPortalData: React.Dispatch<React.SetStateAction<PortalData | null>>
 ): void => {
-    useCharacterInputController(rigidBodyRef, portals, setPortals);
-    useCharacterAnimations(model);
-
-    useEffect(() => {
-        setModelShadow(model);
-    }, [model]);
+    useCharacterInputController(rigidBodyRef, portalData, setPortalData);
+    // useCharacterAnimations(model);
+    //
+    // useEffect(() => {
+    //     setModelShadow(model);
+    // }, [model]);
 };
 
 export default useCharacter;

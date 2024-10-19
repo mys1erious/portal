@@ -8,7 +8,6 @@ import { DEFAULT_ELEMENT_DEPTH, DEFAULT_ELEMENT_SIZE } from '@/constants';
 import { getTexture } from '@/utils';
 import { Vector3D } from '@/types';
 
-
 type ElementProps = {
     position?: Vector3D;
     rotation?: Vector3D;
@@ -62,7 +61,12 @@ const Element = ({
         : null;
 
     return (
-        <RigidBody position={position} rotation={rotation} type={rigidBodyType}>
+        <RigidBody
+            position={position}
+            rotation={rotation}
+            type={rigidBodyType}
+            colliders={'cuboid'}
+        >
             <CuboidCollider args={[width / 2, height / 2, depth / 2]} />
             <mesh castShadow={castShadow} receiveShadow={receiveShadow}>
                 <boxGeometry args={[width, height, depth]} />

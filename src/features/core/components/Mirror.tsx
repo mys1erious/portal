@@ -6,7 +6,7 @@ import { Reflector } from 'three/examples/jsm/objects/Reflector';
 import { DEFAULT_ELEMENT_DEPTH, DEFAULT_ELEMENT_SIZE } from '@/constants';
 import { Vector3D } from '@/types';
 import { useEffect, useMemo, useRef } from 'react';
-import { DoubleSide, Mesh, PlaneGeometry, TextureLoader } from 'three';
+import { DoubleSide, Mesh, PlaneGeometry } from 'three';
 import { CuboidCollider, RigidBody } from '@react-three/rapier';
 
 type MirrorProps = {
