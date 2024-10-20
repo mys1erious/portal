@@ -7,7 +7,12 @@ import { DEFAULT_ELEMENT_DEPTH, DEFAULT_ELEMENT_SIZE } from '@/constants';
 import { Vector3D } from '@/types';
 import { useEffect, useMemo, useRef } from 'react';
 import { DoubleSide, Mesh, PlaneGeometry } from 'three';
-import { CuboidCollider, RigidBody } from '@react-three/rapier';
+import {
+    CuboidCollider,
+    RigidBody,
+    RigidBodyAutoCollider,
+    RigidBodyTypeString,
+} from '@react-three/rapier';
 
 type MirrorProps = {
     position?: Vector3D;
@@ -18,6 +23,8 @@ type MirrorProps = {
     castShadow?: boolean;
     receiveShadow?: boolean;
     baseTextureSrc?: string;
+    rbType?: RigidBodyTypeString;
+    addCollider?: boolean;
 };
 
 const Mirror = ({
@@ -29,6 +36,8 @@ const Mirror = ({
     castShadow = true,
     receiveShadow = true,
     baseTextureSrc,
+    rbType = 'fixed',
+    addCollider = true,
 }: MirrorProps) => {
     const meshRef = useRef<Mesh>(null);
 
@@ -51,8 +60,15 @@ const Mirror = ({
     }, [reflector]);
 
     return (
-        <RigidBody position={position} rotation={rotation} type='fixed'>
-            <CuboidCollider args={[width / 2, height / 2, depth / 2]} />
+        <RigidBody
+            position={position}
+            rotation={rotation}
+            type={rbType}
+            colliders={false}
+        >
+            {addCollider && (
+                <CuboidCollider args={[width / 2, height / 2, depth / 2]} />
+            )}
             <group>
                 <primitive
                     object={reflector}

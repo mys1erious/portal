@@ -1,7 +1,7 @@
 import React from 'react';
 import Element from '@/features/core/components/Element';
 import { Vector3D } from '@/types';
-import { DEFAULT_ELEMENT_SIZE } from '@/constants';
+import { DEFAULT_ELEMENT_DEPTH, DEFAULT_ELEMENT_SIZE } from '@/constants';
 
 type FloorProps = {
     position?: Vector3D;

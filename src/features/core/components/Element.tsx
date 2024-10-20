@@ -67,7 +67,6 @@ const Element = ({
             type={rigidBodyType}
             colliders={'cuboid'}
         >
-            <CuboidCollider args={[width / 2, height / 2, depth / 2]} />
             <mesh castShadow={castShadow} receiveShadow={receiveShadow}>
                 <boxGeometry args={[width, height, depth]} />
                 <meshStandardMaterial
@@ -75,6 +74,7 @@ const Element = ({
                     normalMap={textureNormal}
                 />
             </mesh>
+            <CuboidCollider args={[width / 2, height / 2, depth / 2]} />
         </RigidBody>
     );
 };

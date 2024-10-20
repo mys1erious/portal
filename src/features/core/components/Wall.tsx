@@ -1,7 +1,7 @@
 import React from 'react';
 import Element from '@/features/core/components/Element';
 import { Vector3D } from '@/types';
-import { DEFAULT_ELEMENT_SIZE, DEFAULT_WALL_HEIGHT } from '@/constants';
+import { DEFAULT_ELEMENT_DEPTH, DEFAULT_ELEMENT_SIZE, DEFAULT_WALL_HEIGHT } from '@/constants';
 
 type WallProps = {
     position?: Vector3D;
@@ -24,12 +24,12 @@ const Wall = ({
         <Element
             baseTextureSrc={baseTextureSrc}
             normalTextureSrc={normalTextureSrc}
-            depth={0}
+            depth={DEFAULT_ELEMENT_DEPTH}
             width={width}
             height={height}
             position={position}
             rotation={rotation}
-            widthTextureDivider={DEFAULT_ELEMENT_SIZE}
+            widthTextureDivider={DEFAULT_ELEMENT_SIZE * 1.2}
             heightTextureDivider={DEFAULT_WALL_HEIGHT}
         />
     );

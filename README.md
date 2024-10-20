@@ -5,6 +5,7 @@
 - [ ] fix: jump logic
 - [ ] fix: mirror backside
 - [ ] fix: seeing char head
-- [ ] feat: create a room from Portal
 - [ ] fix: refactor/improve animations
+- [ ] fix: align all 'building' components to use Element
+- [ ] feat: create a level from Portal
 - 

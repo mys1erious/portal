@@ -2,11 +2,10 @@ import React, { useCallback, useRef, useState } from 'react';
 import { useFBX } from '@react-three/drei';
 import useCharacter from '@/features/characters/hooks/useCharacter';
 import { Vector3D } from '@/types';
-import { CapsuleCollider, RigidBody } from '@react-three/rapier';
+import { CapsuleCollider, RapierRigidBody, RigidBody } from '@react-three/rapier';
 import { MANNEQUIN_HEIGHT } from '@/constants';
-import { RigidBody as TRigidBody } from '@dimforge/rapier3d-compat';
 import Portal from '@/features/characters/components/Portal';
-import { Group } from 'three';
+import { Group, Vector3 } from 'three';
 
 const MODEL_PATH = '/models/character/mannequin.fbx';
 
@@ -20,9 +19,10 @@ export type PortalData = {
 };
 
 const Character = ({ position = [0, 1, 0] }: CharacterProps) => {
+    // TODO: is scaling in return slow ?
     const model = useFBX(MODEL_PATH);
 
-    const rb = useRef<TRigidBody>(null);
+    const rb = useRef<RapierRigidBody>(null);
     const container = useRef<Group>(null);
     const character = useRef<Group>(null);
     const cameraTarget = useRef<Group>(null);
@@ -40,9 +40,6 @@ const Character = ({ position = [0, 1, 0] }: CharacterProps) => {
         setPortalData
     );
 
-    const onRemovePortal = useCallback(() => {
-        setPortalData(null);
-    }, []);
 
     return (
         <>
@@ -50,9 +47,11 @@ const Character = ({ position = [0, 1, 0] }: CharacterProps) => {
                 <Portal
                     initialPosition={portalData.position}
                     initialVelocity={portalData.velocity}
-                    onRemove={onRemovePortal}
+                    portalData={portalData}
+                    setPortalData={setPortalData}
                 />
             )}
+
             <RigidBody
                 colliders={false}
                 lockRotations

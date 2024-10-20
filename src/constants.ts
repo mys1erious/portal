@@ -4,11 +4,12 @@ export const ASPECT_RATIO = 1920 / 1080;
 export const MANNEQUIN_HEIGHT = 1.78;
 export const CHARACTER_SPEED = 2;
 export const CHARACTER_RUN_SPEED = 4;
-export const PROJECTILE_SPEED = 10;
+// TODO: do projection instead of actually shooting ? fix speed...
+export const PROJECTILE_SPEED = 20;
 
 export const DEFAULT_ELEMENT_SIZE = 1;
 export const DEFAULT_ELEMENT_DEPTH = 0.2;
-export const DEFAULT_WALL_HEIGHT = MANNEQUIN_HEIGHT * 1.3;
+export const DEFAULT_WALL_HEIGHT = MANNEQUIN_HEIGHT * 1.8;
 
 export const INPUT_ACTION_FORWARD = 'forward';
 export const INPUT_ACTION_LEFT = 'left';

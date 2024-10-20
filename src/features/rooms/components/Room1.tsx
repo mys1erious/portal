@@ -10,6 +10,7 @@ import {
 import DirectionalLight from '@/features/core/components/DirectionalLight';
 import Element from '@/features/core/components/Element';
 import Mirror from '@/features/core/components/Mirror';
+import VideoElement from '@/features/core/components/VideoElement';
 
 const FLOOR_WIDTH = DEFAULT_ELEMENT_SIZE * 32;
 const FLOOR_HEIGHT = DEFAULT_ELEMENT_SIZE * 32;
@@ -66,6 +67,8 @@ const Room1 = () => {
                 position={[-2, DEFAULT_WALL_HEIGHT / 2, 3]}
                 rotation={[0, -Math.PI / 2, 0]}
             />
+
+            <VideoElement url={'/videos/infinite_stars.mp4'} position={[0, 3, -10]}/>
         </group>
     );
 };

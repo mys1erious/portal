@@ -10,10 +10,10 @@ import { Group, MathUtils, Vector3 } from 'three';
 import { useKeyboardControls } from '@react-three/drei';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { PortalData } from '@/features/characters/components/Character';
-import { RigidBody as TRigidBody } from '@dimforge/rapier3d-compat';
+import { RapierRigidBody } from '@react-three/rapier';
 
 const useCharacterInputController = (
-    rb: React.RefObject<TRigidBody>,
+    rb: React.RefObject<RapierRigidBody>,
     container: React.RefObject<Group>,
     cameraPosition: React.RefObject<Group>,
     portalData: PortalData | null,
@@ -125,9 +125,9 @@ const useCharacterInputController = (
         if (rightPressed) {
             moveDir.add(matrixWorldX.current);
         }
-        // if (jumpPressed) {
-        //     moveDir.add(matrixWorldY.current);
-        // }
+        if (jumpPressed) {
+            moveDir.add(matrixWorldY.current);
+        }
 
         moveDir.normalize();
 
@@ -137,7 +137,7 @@ const useCharacterInputController = (
             // rotationTarget.current = Math.atan2(moveDir.x, moveDir.z);
             vel.x = moveDir.x * speed;
             vel.z = moveDir.z * speed;
-            // vel.y = moveDir.y * speed;
+            vel.y = moveDir.y * speed;
         } else {
             vel.x = 0;
             vel.z = 0;

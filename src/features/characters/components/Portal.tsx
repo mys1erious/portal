@@ -1,49 +1,89 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
-import { RigidBody, CuboidCollider } from '@react-three/rapier';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+    RigidBody,
+    RapierRigidBody,
+    BallCollider,
+    CollisionEnterPayload,
+    CuboidCollider,
+} from '@react-three/rapier';
+import { PortalData } from '@/features/characters/components/Character';
+import { Vector3 } from 'three';
+import Mirror from '@/features/core/components/Mirror';
+import VideoElement from '@/features/core/components/VideoElement';
 
 type PortalProps = {
     initialPosition: { x: number; y: number; z: number };
     initialVelocity: { x: number; y: number; z: number };
-    onRemove: () => void;
+    portalData: PortalData | null;
+    setPortalData: React.Dispatch<React.SetStateAction<PortalData | null>>;
 };
 
-const Portal: React.FC<PortalProps> = ({
+const Portal = ({
     initialPosition,
     initialVelocity,
-    onRemove,
-}) => {
-    const rigidBodyRef = useRef<any>(null);
+    portalData,
+    setPortalData,
+}: PortalProps) => {
+    const rb = useRef<RapierRigidBody>(null);
+    const [collisionPosition, setCollisionPosition] = useState<Vector3>(
+        new Vector3()
+    );
 
     useEffect(() => {
-        if (rigidBodyRef.current) {
-            rigidBodyRef.current.setTranslation(initialPosition, true);
-            rigidBodyRef.current.setLinvel(initialVelocity, true);
-
-            const timeoutId = setTimeout(() => {
-                onRemove();
-            }, 5000);
-
-            return () => {
-                clearTimeout(timeoutId);
-            };
+        if (rb.current) {
+            rb.current.setTranslation(initialPosition, true);
+            rb.current.setLinvel(initialVelocity, true);
         }
-    }, [initialPosition, initialVelocity, onRemove]);
+    }, [initialPosition, initialVelocity]);
+
+    const onCollisionEnter = (payload: CollisionEnterPayload) => {
+        if (rb.current) {
+            rb.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
+        }
+
+        // const { manifold } = payload;
+        // const contactPoint = manifold.solverContactPoint(0);
+        // setCollisionPosition(
+        //     new Vector3(contactPoint.x, contactPoint.y, contactPoint.z)
+        // );
+
+        if (rb.current) {
+            const centerPosition = rb.current.translation();
+            setCollisionPosition(new Vector3(centerPosition.x, centerPosition.y, centerPosition.z));
+        }
+    };
 
     return (
-        <RigidBody
-            ref={rigidBodyRef}
-            type='dynamic'
-            colliders={false}
-            gravityScale={0}
-        >
-            <CuboidCollider args={[0.01, 0.01, 0.01]} />
-            <mesh castShadow receiveShadow>
-                <boxGeometry args={[0.02, 0.02, 0.02]} />
-                <meshStandardMaterial color='blue' />
-            </mesh>
-        </RigidBody>
+        <>
+            {collisionPosition.x && (
+                <VideoElement
+                    url={'/videos/infinite_stars.mp4'}
+                    position={[
+                        collisionPosition.x,
+                        collisionPosition.y,
+                        collisionPosition.z,
+                    ]}
+                />
+            )}
+
+            <RigidBody
+                ref={rb}
+                type='dynamic'
+                colliders={false}
+                gravityScale={0}
+                lockRotations
+                onCollisionEnter={onCollisionEnter}
+                ccd={true}
+            >
+                <BallCollider args={[0.1]} />
+                <mesh castShadow receiveShadow>
+                    <boxGeometry args={[0.05, 0.05, 0.05]} />
+                    <meshStandardMaterial color='blue' />
+                </mesh>
+            </RigidBody>
+        </>
     );
 };
 

@@ -4,10 +4,10 @@ import useCharacterAnimations from '@/features/characters/hooks/useCharacterAnim
 import React, { useEffect } from 'react';
 import { setModelShadow } from '@/utils';
 import { PortalData } from '@/features/characters/components/Character';
-import { RigidBody as TRigidBody } from '@dimforge/rapier3d-compat/dynamics/rigid_body';
+import { RapierRigidBody } from '@react-three/rapier';
 
 const useCharacter = (
-    rb: React.RefObject<TRigidBody>,
+    rb: React.RefObject<RapierRigidBody>,
     container: React.RefObject<Group>,
     cameraPosition: React.RefObject<Group>,
     model: Group,
