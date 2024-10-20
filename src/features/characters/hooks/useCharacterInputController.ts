@@ -9,7 +9,7 @@ import { Camera, useFrame, useThree } from '@react-three/fiber';
 import { Group, MathUtils, Vector3 } from 'three';
 import { useKeyboardControls } from '@react-three/drei';
 import React, { useCallback, useEffect, useRef } from 'react';
-import { PortalData } from '@/features/characters/components/Mannequin';
+import { PortalData } from '@/features/characters/components/Character';
 import { RigidBody as TRigidBody } from '@dimforge/rapier3d-compat';
 
 const useCharacterInputController = (

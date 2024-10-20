@@ -10,7 +10,7 @@ import { Group } from 'three';
 
 const MODEL_PATH = '/models/character/mannequin.fbx';
 
-type MannequinProps = {
+type CharacterProps = {
     position?: Vector3D;
 };
 
@@ -19,7 +19,7 @@ export type PortalData = {
     velocity: { x: number; y: number; z: number };
 };
 
-const Mannequin = ({ position = [0, 1, 0] }: MannequinProps) => {
+const Character = ({ position = [0, 1, 0] }: CharacterProps) => {
     const model = useFBX(MODEL_PATH);
 
     const rb = useRef<TRigidBody>(null);
@@ -84,4 +84,4 @@ const Mannequin = ({ position = [0, 1, 0] }: MannequinProps) => {
     );
 };
 
-export default Mannequin;
+export default Character;

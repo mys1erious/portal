@@ -3,7 +3,7 @@ import useCharacterInputController from '@/features/characters/hooks/useCharacte
 import useCharacterAnimations from '@/features/characters/hooks/useCharacterAnimations';
 import React, { useEffect } from 'react';
 import { setModelShadow } from '@/utils';
-import { PortalData } from '@/features/characters/components/Mannequin';
+import { PortalData } from '@/features/characters/components/Character';
 import { RigidBody as TRigidBody } from '@dimforge/rapier3d-compat/dynamics/rigid_body';
 
 const useCharacter = (

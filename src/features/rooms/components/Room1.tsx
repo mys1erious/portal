@@ -1,7 +1,7 @@
 import React from 'react';
 import Floor from '@/features/core/components/Floor';
 import Wall from '@/features/core/components/Wall';
-import Mannequin from '@/features/characters/components/Mannequin';
+import Character from '@/features/characters/components/Character';
 import {
     DEFAULT_ELEMENT_DEPTH,
     DEFAULT_ELEMENT_SIZE,
@@ -19,7 +19,7 @@ const Room1 = () => {
         <group>
             <DirectionalLight />
 
-            <Mannequin />
+            <Character />
 
             <Floor width={FLOOR_WIDTH * 2} height={FLOOR_HEIGHT * 2} />
             <Wall

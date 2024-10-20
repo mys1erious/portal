@@ -1,8 +1,8 @@
 # Portal
 
 - TODO:
-- [ ] fix: jump logic
 - [ ] feat: portal logic
+- [ ] fix: jump logic
 - [ ] fix: mirror backside
 - [ ] fix: seeing char head
 - [ ] feat: create a room from Portal
