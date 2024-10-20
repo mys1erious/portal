@@ -1,11 +1,10 @@
 # Portal
 
 - TODO:
-- [ ] fix: m perhaps return 1 hidden portal component which resets on shoot
+- [ ] fix: jump logic
 - [ ] feat: portal logic
-- [ ] fix: char auto sliding
-- [ ] fix: bounce from small platforms
 - [ ] fix: mirror backside
 - [ ] fix: seeing char head
-- [ ] fix: shaking
-- [ ] 
+- [ ] feat: create a room from Portal
+- [ ] fix: refactor/improve animations
+- 
